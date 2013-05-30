@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<charts>
+	<chart dataSourceName="TargetSubmitView" title="上报有限公司目标表"
+		columnKey="petroleum_liquids">
+		<series rowKey="目标" valueName="gross_target_square" color="#FF0000"></series>
+		<series rowKey="实际" valueName="gross_real_square" color="#0000FF"></series>
+	</chart>
+	<chart dataSourceName="TargetStageFollowView" title="调整后目标阶段跟踪表"
+		columnKey="petroleum_liquids">
+		<series rowKey="目标" valueName="gross_target_square"></series>
+		<series rowKey="实际" valueName="gross_real_square"></series>
+	</chart>
+	<chart dataSourceName="ExceedDetailView" title="各油田超欠产详细表"
+		columnKey="oilfield">
+		<series rowKey="目标" valueName="sum_goal"></series>
+		<series rowKey="实际" valueName="sum_real"></series>
+	</chart>
+	<chart dataSourceName="OutputView" title="产量计划表"
+		columnKey="workareas">
+		<series rowKey="基础产量" valueName="wellsmeasure_forecast"></series>
+		<series rowKey="自用油" valueName="self_forecast"></series>
+		<series rowKey="调整井产量" valueName="adjustmentwells_forecast"></series>
+		<series rowKey="开发井产量" valueName="developmentwells_forecast"></series>
+		<series rowKey="措施产量" valueName="measureoutput_forecast"></series>
+	</chart>
+</charts>

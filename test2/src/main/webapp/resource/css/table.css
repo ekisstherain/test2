@@ -1,0 +1,92 @@
+body {
+	padding: 0px;
+	margin: 0px;
+	font-size: 12px;
+	color: #000;
+	background: #d1dff0;
+}
+
+.table_p {
+	font-size: 18px;
+	font-weight: bold;
+	color: #0a1a50;
+	text-align: center;
+	padding: 10px;
+	margin: 0px;
+}
+
+.table_layout {
+	background: #FFF;
+	padding: 0px 20px 20px 20px;
+}
+
+.table_layout table {
+	background: #0a1a50;
+	color: #0a1a50;
+}
+
+.table_layout table td {
+	background: #FFF;
+	line-height: 25px;
+	height: 25px;
+	text-align: center;
+}
+
+.table_layout table .table_head td {
+	height: 30px;
+	line-height: 30px;
+	background: #B0B7D2;
+	color: #0a1a50;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.table_layout table .table_tr td {
+	background: #e6e9f1;
+}
+
+.page1 {
+	float: left;
+	padding-left: 20px;
+	line-height: 30px;
+	font-size: 14px;
+	font-weight: bold;
+	color: #0a1a50;
+}
+
+.page2 {
+	float: right;
+	padding-right: 20px;
+	line-height: 30px;
+	color: #0a1a50;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.page2 a {
+	color: #0a1a50;
+	text-decoration: none;
+}
+
+.page2 a:hover {
+	color: #0a1a50;
+	text-decoration: underline;
+}
+
+.manage_title{
+	height:36px;
+	padding-top:2px;
+	background:#FFF;
+	border-bottom:3px solid #5086cf;
+	padding-left:30px;
+}
+.manage_bg{
+	background:url(../images/manage_bg_07.gif) repeat-x 0 0;
+	height:40px;
+	line-height:40px;
+	_line-height:32px;
+	_height:32px;
+	_padding-top:8px;
+	text-align:right;
+	padding-right:20px;
+}

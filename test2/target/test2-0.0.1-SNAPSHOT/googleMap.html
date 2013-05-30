@@ -1,0 +1,107 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Index</title>
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<style type="text/css">
+#info {
+	width: 400px;
+	height: 60px;
+	border: 1px solid;
+}
+
+#map {
+	width: 800px;
+	height: 600px;
+	border: 1px solid;
+	margin-top: 10px;
+}
+</style>
+</head>
+<body>
+	<input type="button" id="btn" value="获取位置">
+	<div id="info" title="用户地理位置信息"></div>
+	<div id="map" title="google 地图"></div>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			var btn = document.getElementById('btn');
+			var info = document.getElementById('info');
+			var map = document.getElementById('map');
+			var geolocation;
+			var gmap;
+			var gmarker;
+			$("#btn").click(function() {
+				if (window.navigator.geolocation) {
+					info.innerHTML = "请等待查询结果……";
+					geolocation = window.navigator.geolocation;
+					geolocation.getCurrentPosition(getPositionSuccess, getPositionError, {
+						timeout : 5000
+					});
+				} else {
+					info.innerHTML = "您的浏览器不支持地理喂猴子定位";
+				}
+			});
+			function getPositionError(error) {
+				switch (error.code) {
+				case error.TIMEOUT:
+					info.innerHTML = "连接超时";
+					break;
+				case error.PERMISSION_DENIED:
+					info.innerHTML = "无权使用地理位置共享服务";
+					break;
+				case error.POSITION_UNAVAILABLE:
+					info.innerHTML = "无法提供位置服务";
+					break;
+				}
+			}
+			function getPositionSuccess(position) {
+				var lat = position.coords.latitude;
+				var lon = position.coords.longitude;
+				geolocation.watchPosition(refreshPosition);
+				var latLng = new google.maps.LatLng(lat, lon);
+				var mapOptions = {
+					zoom : 16,
+					center : latLng,
+					mapTypeId : google.maps.MapTypeId.ROADMAP
+				};
+				gmap = new google.maps.Map(map, mapOptions);
+				gmarker = new google.maps.Marker({
+					position : latLng,
+					map : gmap
+				});
+			}
+			/*持续追踪地理位置*/
+			function refreshPosition(position) {
+				var lat = position.coords.latitude;
+				var lon = position.coords.longitude;
+				//将经纬度转换为地名
+				getPlaceFromFlickr(lat, lon, 'output');
+				var latLng = new google.maps.LatLng(lat, lon);
+				//重设地图位置
+				gmap.setSenter(latLng);
+				//重设标记位置
+				gmarker.setOptions({
+					position : latLng
+				});
+			}
+			//将经纬度转化为地名
+			function getPlaceFromFlickr(lat, lon, callback) {
+				info.innerHTML = "您所在的位置 经度：" + lat + ", 纬度：" + lon;
+				var yql = 'select * from flickr.places where lat=' + lat + ' and lon=' + lon;
+				//将YQL网络服务器的api嵌入到网页，这是javascript库
+				var url = 'http://query.yahooapis.com/v1/public/yql?q=' + encodeURIComponent(yql) + '&format=json&diagnostics=' + 'false&callback=' + output;
+				var script = document.createElement('script');
+				script.setAttribute('src', url);
+				document.getElementsByTagName('head')[0].appendChild(script);
+			}
+			function output(o) {
+				if (typeof (o.query.results.places.place) != 'undefined') {
+					info.innerHTML += "<br/>" + o.query.results.places.place.name;
+				}
+			}
+		});
+	</script>
+</body>
+</html>

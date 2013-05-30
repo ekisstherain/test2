@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gdie.dao.AccountMapper">
+	<resultMap id="BaseResultMap" type="com.gdie.entity.Account">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="pay" property="pay" jdbcType="DOUBLE" />
+		<result column="use_type" property="useType" jdbcType="VARCHAR" />
+		<result column="use_date" property="useDate" jdbcType="DATE" />
+		<result column="payor" property="payor" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="VARCHAR" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, pay, use_type, use_date, payor, status,remark
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from t_account
+		where id = #{id,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from t_account
+		where id = #{id,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.gdie.entity.Account">
+		insert into t_account (id, pay, use_type,
+		use_date, payor,
+		status,remark)
+		values (#{id,jdbcType=VARCHAR}, #{pay,jdbcType=DOUBLE}, #{useType,jdbcType=VARCHAR},
+		#{useDate,jdbcType=DATE}, #{payor,jdbcType=VARCHAR},
+		#{status,jdbcType=VARCHAR},#{remark,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.gdie.entity.Account">
+		insert into t_account
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="pay != null">
+				pay,
+			</if>
+			<if test="useType != null">
+				use_type,
+			</if>
+			<if test="useDate != null">
+				use_date,
+			</if>
+
+			<if test="payor != null">
+				payor,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=VARCHAR},
+			</if>
+			<if test="pay != null">
+				#{pay,jdbcType=DOUBLE},
+			</if>
+			<if test="useType != null">
+				#{useType,jdbcType=VARCHAR},
+			</if>
+			<if test="useDate != null">
+				#{useDate,jdbcType=DATE},
+			</if>
+
+			<if test="payor != null">
+				#{payor,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null">
+				#{remark,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.gdie.entity.Account">
+		update t_account
+		<set>
+			<if test="pay != null">
+				pay = #{pay,jdbcType=DOUBLE},
+			</if>
+			<if test="useType != null">
+				use_type = #{useType,jdbcType=VARCHAR},
+			</if>
+			<if test="useDate != null">
+				use_date = #{useDate,jdbcType=DATE},
+			</if>
+
+			<if test="payor != null">
+				payor = #{payor,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.gdie.entity.Account">
+		update t_account
+		set pay = #{pay,jdbcType=DOUBLE},
+		use_type = #{useType,jdbcType=VARCHAR},
+		use_date = #{useDate,jdbcType=DATE},
+		payor = #{payor,jdbcType=VARCHAR},
+		status = #{status,jdbcType=VARCHAR},
+		remark = #{remark,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+
+	<select id="query" resultMap="BaseResultMap" parameterType="com.gdie.vo.SqlParam">
+		select
+		<include refid="Base_Column_List" />
+		from t_account
+		${where}
+	</select>
+	<select id="count" resultType="java.lang.Long" parameterType="com.gdie.vo.SqlParam">
+		select count(*)
+		from t_account
+		${where}
+	</select>
+	<select id="selectAccountView" resultMap="BaseResultMap" parameterType="com.gdie.vo.SqlParam">
+		select t.* from 
+		(select a.*, gdie_contract(a.id) as customersName, u.name as payorName 
+		from t_account as a join t_user as u on u.id = a.payor left join t_history as h on a.id = h.object order by h.operate_time desc) as t
+		${where}
+	</select>
+
+	<resultMap id="StatResultMap" type="com.gdie.entity.Statistics">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="customer" property="customer" jdbcType="VARCHAR" />
+		<result column="pay" property="pay" jdbcType="DOUBLE" />
+		<result column="consume" property="consume" jdbcType="DOUBLE" />
+		<result column="balance" property="balance" jdbcType="DOUBLE" />
+	</resultMap>
+	<select id="statistics" resultMap="StatResultMap" parameterType="com.gdie.vo.DateScope">
+		select u.id, u.name as customer, pr.pay as pay, be.balance as consume, gdie_minus(pr.pay, be.balance) as balance
+		from (
+		select sum(pay) pay, a.payor as userid from t_account as a
+		where a.use_date &gt;= #{startDate} and a.use_date &lt;= #{endDate}
+		group by a.payor
+		) as pr full outer join (
+		select sum(md.balance) balance, ad.customer_id as userid
+		from (select a.pay/count(ad.account_id) as balance, ad.account_id
+		from t_account as a join t_account_detail as ad on a.id = ad.account_id
+		where a.use_date &gt;= #{startDate} and a.use_date &lt;= #{endDate}
+		group by ad.account_id, a.pay
+		) as md, t_account_detail as ad
+		where ad.account_id = md.account_id
+		group by ad.customer_id
+		) as be on pr.userid = be.userid left
+		join t_user as u on u.id = pr.userid or u.id = be.userid;
+
+	</select>
+</mapper>

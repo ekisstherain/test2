@@ -1,0 +1,32 @@
+a {
+	color: #007bc4 /*#424242*/;
+	text-decoration: none;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0
+}
+
+body {
+	height: 100%;
+	font: 12px/18px Tahoma, Helvetica, Arial, Verdana, "\5b8b\4f53",
+		sans-serif;
+	color: #51555C;
+}
+
+input {
+	width: 108px;
+	height: 20px;
+	line-height: 20px;
+	padding: 2px;
+	border: 1px solid #d3d3d3
+}
+
+.buttons input {
+	width: auto;
+	height: 30px;
+	line-height: 30px;
+	padding: 2px;
+	border: 1px solid #d3d3d3
+}

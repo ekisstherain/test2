@@ -1,0 +1,7 @@
+#created by Apusic
+#Wed Jul 25 09:58:14 CST 2012
+scm.jdbc.url=jdbc:postgresql://localhost/common
+scm.jdbc.username=commonhhp
+#scm.jdbc.driverClassName=org.postgresql.Driver
+scm.jdbc.password=common
+validationQuery=SELECT 1

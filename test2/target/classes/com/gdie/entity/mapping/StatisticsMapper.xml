@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gdie.dao.StatisticsMapper">
+	<resultMap id="BaseResultMap" type="com.gdie.entity.Statistics">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="customer" property="customer" jdbcType="VARCHAR" />
+		<result column="pay" property="pay" jdbcType="DOUBLE" />
+		<result column="consume" property="consume" jdbcType="DOUBLE" />
+		<result column="balance" property="balance" jdbcType="DOUBLE" />
+		<result column="balanced_date" property="balancedDate" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, customer, pay, consume, balance, balanced_date
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from t_statistics
+		where id = #{id,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from t_statistics
+		where id = #{id,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.gdie.entity.Statistics">
+		insert into t_statistics (id, customer, pay,
+		consume, balance, balanced_date
+		)
+		values (#{id,jdbcType=VARCHAR}, #{customer,jdbcType=VARCHAR}, #{pay,jdbcType=DOUBLE},
+		#{consume,jdbcType=DOUBLE}, #{balance,jdbcType=DOUBLE}, #{balancedDate,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.gdie.entity.Statistics">
+		insert into t_statistics
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="customer != null">
+				customer,
+			</if>
+			<if test="pay != null">
+				pay,
+			</if>
+			<if test="consume != null">
+				consume,
+			</if>
+			<if test="balance != null">
+				balance,
+			</if>
+			<if test="balancedDate != null">
+				balanced_date,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=VARCHAR},
+			</if>
+			<if test="customer != null">
+				#{customer,jdbcType=VARCHAR},
+			</if>
+			<if test="pay != null">
+				#{pay,jdbcType=DOUBLE},
+			</if>
+			<if test="consume != null">
+				#{consume,jdbcType=DOUBLE},
+			</if>
+			<if test="balance != null">
+				#{balance,jdbcType=DOUBLE},
+			</if>
+			<if test="balancedDate != null">
+				#{balancedDate,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.gdie.entity.Statistics">
+		update t_statistics
+		<set>
+			<if test="customer != null">
+				customer = #{customer,jdbcType=VARCHAR},
+			</if>
+			<if test="pay != null">
+				pay = #{pay,jdbcType=DOUBLE},
+			</if>
+			<if test="consume != null">
+				consume = #{consume,jdbcType=DOUBLE},
+			</if>
+			<if test="balance != null">
+				balance = #{balance,jdbcType=DOUBLE},
+			</if>
+			<if test="balancedDate != null">
+				balanced_date = #{balancedDate,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.gdie.entity.Statistics">
+		update t_statistics
+		set customer = #{customer,jdbcType=VARCHAR},
+		pay = #{pay,jdbcType=DOUBLE},
+		consume = #{consume,jdbcType=DOUBLE},
+		balance = #{balance,jdbcType=DOUBLE},
+		balanced_date = #{balancedDate,jdbcType=TIMESTAMP}
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+
+	<select id="query" resultMap="BaseResultMap" parameterType="com.gdie.vo.SqlParam">
+		select
+		<include refid="Base_Column_List" />
+		from t_statistics
+		${where}
+	</select>
+	<select id="count" resultType="java.lang.Long" parameterType="com.gdie.vo.SqlParam">
+		select count(*)
+		from t_statistics
+		${where}
+	</select>
+</mapper>

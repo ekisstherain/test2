@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gdie.dao.HistoryMapper">
+	<resultMap id="BaseResultMap" type="com.gdie.entity.History">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="operate_time" property="operateTime" jdbcType="TIMESTAMP" />
+		<result column="operate_user" property="operateUser" jdbcType="VARCHAR" />
+		<result column="detail" property="detail" jdbcType="VARCHAR" />
+		<result column="object" property="object" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, operate_time, operate_user, detail, object
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from t_history
+		where id = #{id,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from t_history
+		where id = #{id,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.gdie.entity.History">
+		insert into t_history (id, operate_time, operate_user,
+		detail, object)
+		values (#{id,jdbcType=VARCHAR}, #{operateTime,jdbcType=TIMESTAMP}, #{operateUser,jdbcType=VARCHAR},
+		#{detail,jdbcType=VARCHAR}, #{object,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.gdie.entity.History">
+		insert into t_history
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="operateTime != null">
+				operate_time,
+			</if>
+			<if test="operateUser != null">
+				operate_user,
+			</if>
+			<if test="detail != null">
+				detail,
+			</if>
+			<if test="object != null">
+				object,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=VARCHAR},
+			</if>
+			<if test="operateTime != null">
+				#{operateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="operateUser != null">
+				#{operateUser,jdbcType=VARCHAR},
+			</if>
+			<if test="detail != null">
+				#{detail,jdbcType=VARCHAR},
+			</if>
+			<if test="object != null">
+				#{object,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.gdie.entity.History">
+		update t_history
+		<set>
+			<if test="operateTime != null">
+				operate_time = #{operateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="operateUser != null">
+				operate_user = #{operateUser,jdbcType=VARCHAR},
+			</if>
+			<if test="detail != null">
+				detail = #{detail,jdbcType=VARCHAR},
+			</if>
+			<if test="object != null">
+				object = #{object,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.gdie.entity.History">
+		update t_history
+		set operate_time = #{operateTime,jdbcType=TIMESTAMP},
+		operate_user = #{operateUser,jdbcType=VARCHAR},
+		detail = #{detail,jdbcType=VARCHAR},
+		object = #{object,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+
+	<select id="query" resultMap="BaseResultMap" parameterType="com.gdie.vo.SqlParam">
+		select
+		h.*, u.name as operateUserName
+		from t_history as h left join t_user as u on u.id = h.operate_user
+		${where}
+	</select>
+	<select id="count" resultType="java.lang.Long" parameterType="com.gdie.vo.SqlParam">
+		select count(*)
+		from t_history
+		${where}
+	</select>
+</mapper>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gdie.dao.AccountDetailMapper">
+	<resultMap id="BaseResultMap" type="com.gdie.entity.AccountDetailKey">
+		<id column="account_id" property="accountId" jdbcType="VARCHAR" />
+		<id column="customer_id" property="customerId" jdbcType="VARCHAR" />
+	</resultMap>
+	<delete id="deleteByPrimaryKey" parameterType="com.gdie.entity.AccountDetailKey">
+		delete from t_account_detail
+		where account_id = #{accountId,jdbcType=VARCHAR}
+		and customer_id = #{customerId,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.gdie.entity.AccountDetailKey">
+		insert into t_account_detail (account_id, customer_id)
+		values (#{accountId,jdbcType=VARCHAR}, #{customerId,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.gdie.entity.AccountDetailKey">
+		insert into t_account_detail
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="accountId != null">
+				account_id,
+			</if>
+			<if test="customerId != null">
+				customer_id,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="accountId != null">
+				#{accountId,jdbcType=VARCHAR},
+			</if>
+			<if test="customerId != null">
+				#{customerId,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+
+	<select id="findByAccount" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select * from t_account_detail where account_id = #{id}
+	</select>
+	<delete id="deleteByAccount" parameterType="java.lang.String">
+		delete from t_account_detail
+		where account_id = #{accountId,jdbcType=VARCHAR}
+	</delete>
+
+	<select id="findAll" resultMap="BaseResultMap">
+	select * from t_account_detail
+	</select>
+</mapper>

@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gdie.dao.UserMapper">
+	<resultMap id="BaseResultMap" type="com.gdie.entity.User">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="createdate" property="createdate" jdbcType="VARCHAR" />
+		<result column="age" property="age" jdbcType="INTEGER" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="password" property="password" jdbcType="VARCHAR" />
+		<result column="createuser" property="createuser" jdbcType="VARCHAR" />
+		<result column="lastmodifydate" property="lastmodifydate" jdbcType="VARCHAR" />
+		<result column="lastmodifyuser" property="lastmodifyuser" jdbcType="VARCHAR" />
+		<result column="account" property="account" jdbcType="VARCHAR" />
+		<result column="role" property="role" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, createdate, age, name, password, createuser,
+		lastmodifydate, lastmodifyuser,
+		account, role
+	</sql>
+	<sql id="Base_Column_List1">
+		u.id, u.createdate, u.age, u.name, u.password, u.createuser,
+		u.lastmodifydate, u.lastmodifyuser,
+		u.account, u.role
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from t_user
+		where id = #{id,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from t_user
+		where id = #{id,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.gdie.entity.User">
+		insert into t_user (id,
+		createdate, age,
+		name, password, createuser,
+		lastmodifydate,
+		lastmodifyuser, account,role
+		)
+		values (#{id,jdbcType=VARCHAR},
+		#{createdate,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER},
+		#{name,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
+		#{createuser,jdbcType=VARCHAR},
+		#{lastmodifydate,jdbcType=VARCHAR},
+		#{lastmodifyuser,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR},
+		#{role,jdbcType=VARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.gdie.entity.User">
+		insert into t_user
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="createdate != null">
+				createdate,
+			</if>
+			<if test="age != null">
+				age,
+			</if>
+			<if test="name != null">
+				name,
+			</if>
+			<if test="password != null">
+				password,
+			</if>
+			<if test="createuser != null">
+				createuser,
+			</if>
+			<if test="lastmodifydate != null">
+				lastmodifydate,
+			</if>
+			<if test="lastmodifyuser != null">
+				lastmodifyuser,
+			</if>
+			<if test="account != null">
+				account,
+			</if>
+			<if test="role != null">
+				role,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=VARCHAR},
+			</if>
+			<if test="createdate != null">
+				#{createdate,jdbcType=VARCHAR},
+			</if>
+			<if test="age != null">
+				#{age,jdbcType=INTEGER},
+			</if>
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="password != null">
+				#{password,jdbcType=VARCHAR},
+			</if>
+			<if test="createuser != null">
+				#{createuser,jdbcType=VARCHAR},
+			</if>
+			<if test="lastmodifydate != null">
+				#{lastmodifydate,jdbcType=VARCHAR},
+			</if>
+			<if test="lastmodifyuser != null">
+				#{lastmodifyuser,jdbcType=VARCHAR},
+			</if>
+			<if test="account != null">
+				#{account,jdbcType=VARCHAR},
+			</if>
+			<if test="role != null">
+				#{role,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.gdie.entity.User">
+		update t_user
+		<set>
+			<if test="createdate != null">
+				createdate = #{createdate,jdbcType=VARCHAR},
+			</if>
+			<if test="age != null">
+				age = #{age,jdbcType=INTEGER},
+			</if>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="password != null">
+				password = #{password,jdbcType=VARCHAR},
+			</if>
+			<if test="createuser != null">
+				createuser = #{createuser,jdbcType=VARCHAR},
+			</if>
+			<if test="lastmodifydate != null">
+				lastmodifydate = #{lastmodifydate,jdbcType=VARCHAR},
+			</if>
+			<if test="lastmodifyuser != null">
+				lastmodifyuser = #{lastmodifyuser,jdbcType=VARCHAR},
+			</if>
+			<if test="account != null">
+				account = #{account,jdbcType=VARCHAR},
+			</if>
+			<if test="role != null">
+				role = #{role,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.gdie.entity.User">
+		update t_user
+		set
+		createdate = #{createdate,jdbcType=VARCHAR},
+		age = #{age,jdbcType=INTEGER},
+		name = #{name,jdbcType=VARCHAR},
+		password = #{password,jdbcType=VARCHAR},
+		createuser = #{createuser,jdbcType=VARCHAR},
+		lastmodifydate = #{lastmodifydate,jdbcType=VARCHAR},
+		lastmodifyuser = #{lastmodifyuser,jdbcType=VARCHAR},
+		account = #{account,jdbcType=VARCHAR},
+		role = #{role,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+
+	<!-- 自定义语句 ==================================================================================== -->
+
+	<resultMap type="com.gdie.entity.User" id="findAllResultMap" extends="BaseResultMap">
+		<collection property="roles" javaType="list" ofType="com.gdie.entity.Role">
+			<id column="role_id" property="id" jdbcType="VARCHAR" />
+			<result column="role_name" property="name" jdbcType="VARCHAR" />
+		</collection>
+	</resultMap>
+	<!-- 查询所有 -->
+	<select id="findAll" resultMap="findAllResultMap">
+		SELECT
+		u.*,
+		r.id as role_id,
+		r.name
+		as role_name
+		from t_user as u
+		left join t_user_role as ur on u.id = ur.user_id
+		left join t_role as r on r.id = ur.role_id;
+	</select>
+
+	<select id="findByAccount" resultMap="BaseResultMap" parameterType="com.gdie.entity.User">
+		select
+		<include refid="Base_Column_List" />
+		from t_user
+		where account = #{account,jdbcType=VARCHAR} and password = #{password,jdbcType=VARCHAR}
+	</select>
+
+	<select id="query" resultMap="BaseResultMap" parameterType="com.gdie.vo.SqlParam">
+		select
+		<include refid="Base_Column_List" />, roleName
+		from (select <include refid="Base_Column_List1" />, r.name as roleName
+		from t_user as u
+		left join t_role as r on r.id = u.role) as u
+		${where}
+	</select>
+	<select id="count" resultType="java.lang.Long" parameterType="com.gdie.vo.SqlParam">
+		select count(u)
+		from t_user as u
+		left join t_role as r on r.id = u.role
+		${where}
+	</select>
+</mapper>

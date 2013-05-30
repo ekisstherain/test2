@@ -1,0 +1,25 @@
+@charset "utf-8";
+.top {
+	background-color: #1B3143;
+	background-image: url(../images/top-right.gif);
+	background-repeat: repeat-x;
+	height: 64px;
+	width: 100%;
+	margin: 0px;
+}
+body {
+	margin: 0px;
+	padding: 0px;
+}
+.title {
+	color: #FFF;
+	font-size: 12px;
+	position: relative;
+	padding-top: 15px;
+	padding-left: 10px;
+	font-family: Verdana, Geneva, sans-serif;
+}
+.top .title span {
+	font-size: 14px;
+	font-weight: bold;
+}

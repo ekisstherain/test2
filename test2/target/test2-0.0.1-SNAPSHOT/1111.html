@@ -1,0 +1,198 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>lbs</title>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.3"></script>
+<script src="http://maps.google.com/maps/api/js?sensor=false&libraries=places" type="text/javascript"></script>
+<link rel="site" href="http://map.yanue.net/" />
+<script type="text/javascript">
+	/* function getLocation() {
+		if (navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(showMap, handleError, {
+				enableHighAccuracy : true,
+				maximumAge : 10000
+			});
+		} else {
+			alert("您的浏览器不支持使用HTML 5来获取地理位置服务");
+		}
+	}
+
+	function showMap(value) {
+		var longitude = value.coords.longitude;
+		var latitude = value.coords.latitude;
+		var map = new BMap.Map("map");
+		var point = new BMap.Point(longitude, latitude); // 创建点坐标
+		map.centerAndZoom(point, 15);
+		var marker = new BMap.Marker(new BMap.Point(longitude, latitude)); // 创建标注
+		map.addOverlay(marker); // 将标注添加到地图中
+	}
+
+	function handleError(value) {
+		switch (value.code) {
+		case 1:
+			alert("位置服务被拒绝");
+			break;
+		case 2:
+			alert("暂时获取不到位置信息");
+			break;
+		case 3:
+			alert("获取信息超时");
+			break;
+		case 4:
+			alert("未知错误");
+			break;
+		}
+	} */
+
+	/* function init() {
+		getLocation();
+	}
+
+	window.onload = init; */
+
+	/* function getUserLocation() {
+		//checkifthegeolocationobjectissupported,ifsogetposition 
+		if (navigator.geolocation)
+			navigator.geolocation.getCurrentPosition(displayLocation, handleError);
+		else
+			document.getElementById("locationData").innerHTML = "Sorry-yourbrowserdoesn'tsupportgeolocation!";
+	}
+
+	function displayLocation(position) {
+		//buildtextstringincludingco-ordinatedatapassedinparameter 
+		var displayText = "User 纬度: " + position.coords.latitude + " and 经度: " + position.coords.longitude;
+		//displaythestringfordemonstration 
+		if (position.address !== undefined) {
+			var country = position.address.country;
+			var province = position.address.region;
+			var city = position.address.city;
+			displayText += '； 您位于 ' + country + province + '省' + city + '市';
+
+		} else {
+			displayText += "; 地址找不到";
+		}
+
+		var geo = new geoEach();
+		geo.toAddress(position.coords.latitude + "," + position.coords.longitude);
+		document.getElementById("locationData").innerHTML = displayText;
+	}
+ */
+	/*
+	 * 函数名：  geoEach()
+	 * 功能：地名解析成经纬度,经纬度解析成地名
+	 * 作者：yanue
+	 * 使用方法：
+	  //初始化
+	  var geo = new  geoEach();
+	  // 解析地名 传入值地名 结果：纬度lat,经度lng
+	  geo.toLatLng(地名);
+	  // 解析经纬度 传入值（纬度lat,经度lng）：26.57, 106.72 结果是地名
+	  geo.toAddress(经纬度字符串);
+	 */
+	function geoEach() {
+		//初始化地图
+		geoEach.map = new google.maps.Map(document.getElementById("map_canvas"), {
+			center : new google.maps.LatLng(26.57, 106.72),
+			zoom : 8,
+			mapTypeId : google.maps.MapTypeId.ROADMAP
+		});
+		//添加一个marker
+		geoEach.marker = new google.maps.Marker({
+			map : geoEach.map,
+			position : new google.maps.LatLng(26.57, 106.72)
+		});
+		//实例化Geocoder服务
+		geoEach.geocoder = new google.maps.Geocoder();
+	}
+	geoEach.address = null;//需要解析的地名
+	geoEach.latLng = null;//需要解析的经纬度字符串
+	geoEach.prototype = {
+		//解析地名
+		toLatLng : function(address) {
+			//接收
+			geoEach.address = address;
+			//执行geocode解析地名
+			geoEach.geocoder.geocode({
+				//传入地名
+				'address' : geoEach.address
+			}, function(results, status) {
+				//create div
+				var newElement = window.document.createElement('p');
+				if (status == google.maps.GeocoderStatus.OK) {
+					//获取解析后的经纬度
+					var location = results[0].geometry.location;
+					//切换地图位置
+					geoEach.map.setCenter(location);
+					geoEach.marker.setPosition(location);
+
+					// location is like (26.647449, 106.63014299999998) so we should clear '(' in zhe start of this string and ')' in end;
+					var latLng = location.toString().substr(1, location.toString().indexOf(')') - 1);
+					// insert innerHTML
+					newElement.innerHTML = geoEach.address + "：" + latLng;
+				} else {
+					// insert error innerHTML
+					newElement.innerHTML = geoEach.address + "：error " + status;
+				}
+				//append child
+				document.getElementById('showResults').appendChild(newElement);
+			});
+		},
+		//解析经纬度
+		toAddress : function(latLng) {
+			geoEach.latLng = latLng.toString();
+			//去除中间所有空格，将中文'，'号替换成英文','并按','分割
+			geoEach.latLng = geoEach.latLng.replace(/[(^\s+)(\s+$)]/g, "").replace('，', ',').split(',');
+			//geoEach.latLng = latLng;
+			//第一个值为纬度并转化为float类型
+			var lat = parseFloat(geoEach.latLng[0]);
+			//第二个值为经度并转化为float类型
+			var lng = parseFloat(geoEach.latLng[1]);
+			//执行geocode解析经纬度
+			geoEach.geocoder.geocode({
+				//传入经纬度
+				'location' : new google.maps.LatLng(lat, lng)
+			}, function(results, status) {
+				//create div to show result
+				var newElement = window.document.createElement('p')
+				if (status == google.maps.GeocoderStatus.OK) {
+					//获取解析后的经纬度
+					var location = results[0].geometry.location;
+					//切换地图位置
+					//geoEach.map.setCenter(location);
+					//geoEach.marker.setPosition(location);
+					//获取解析后的地址
+					var address = results[0].formatted_address;
+					// insert result innerHTML
+					newElement.innerHTML = geoEach.latLng + "：" + address;
+				} else {
+					// insert error innerHTML
+					newElement.innerHTML = geoEach.latLng + "：error " + status;
+				}
+				//append child
+				document.getElementById('showResults').appendChild(newElement);
+			});
+		}
+	}
+
+	window.onload = function() {
+		var geo = new geoEach();
+		var getLocation = document.getElementById('getLocation');
+		window.onload = function() {
+			var geo = new geoEach();
+			var getLocation = document.getElementById('getLocation');
+			
+		}
+	}
+</script>
+</head>
+
+<body>
+	<input id="getLocation" type="button" value="get location" />
+	<div id="locationData">Location data here</div>
+
+	<div id="map" style="width: 600px; height: 600px;"></div>
+
+	<div id="showResults"></div>
+</body>
+</html>

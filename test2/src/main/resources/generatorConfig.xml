@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration>
+	<classPathEntry location="D:\RUNTIME\PostgreSQL\postgresql-8.4-701.jdbc4.jar"/>
+	<context id="context1" targetRuntime="MyBatis3">
+		<plugin type="com.gdie.mybatis.plugins.CachePlugin" >
+			<property name="cache_size" value="20"/>
+		</plugin>
+		<commentGenerator>
+			<property name="suppressAllComments" value="true" />
+		</commentGenerator>
+		<jdbcConnection driverClass="org.postgresql.Driver" connectionURL="jdbc:postgresql://localhost/common" userId="commonhhp" password="common" />
+		<javaModelGenerator targetPackage="com.gdie.entity" targetProject="ssm" />
+		<sqlMapGenerator targetPackage="com.gdie.entity.mapping" targetProject="ssm" />
+		<javaClientGenerator targetPackage="com.gdie.dao" targetProject="ssm" type="XMLMAPPER" />
+
+		<!-- <table schema="???" tableName="???"> <columnOverride column="???" property="???" /> </table> -->
+		<table tableName="t_role" domainObjectName="Role" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
+
+		</table>
+	</context>
+</generatorConfiguration>
